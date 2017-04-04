@@ -89,3 +89,7 @@ ENV/
 .ropeproject
 
 photos/
+*.png
+*.jpg
+*.jpeg
+test-jurassic.py
