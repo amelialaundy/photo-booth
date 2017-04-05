@@ -1,5 +1,6 @@
 import cv2
-import time
+import numpy as np
+
 # testing
 cv2.namedWindow("preview")
 vc = cv2.VideoCapture(0)
@@ -27,5 +28,10 @@ while rval:
         print 'restarting'
         foldernum = foldernum +1
         photonum = 1
+
+img1 = cv2.imread('./photos/{0}photo-{1}.png'.format(foldernum,photonum))
+img2 = cv2.imread('./photos/{0}photo-{1}.png'.format(foldernum-1, photonum-1))
+vis = np.concatenate((img1, img2), axis=1)
+cv2.imwrite('/photos/out.png', vis)
         
 cv2.destroyWindow("preview") 
