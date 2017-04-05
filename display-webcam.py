@@ -22,16 +22,21 @@ while rval:
         name = './photos/{0}photo-{1}.png'.format(foldernum,photonum)
         print 'taking photo {0}'.format(name)
         #borderimg = cv2.rectangle(frame,(384,0),(510,128),(0,255,0),2)
-        cv2.imwrite(name,frame)
+        cv2.imwrite(name, frame)
         photonum = photonum + 1
     if key == 1048675:
         print 'restarting'
         foldernum = foldernum +1
         photonum = 1
 
-img1 = cv2.imread('./photos/{0}photo-{1}.png'.format(foldernum,photonum))
+for x in range(1, photonum):
+    print(x)
+    
+img1 = cv2.imread('./photos/{0}photo-{1}.png'.format(foldernum, photonum))
 img2 = cv2.imread('./photos/{0}photo-{1}.png'.format(foldernum-1, photonum-1))
-vis = np.concatenate((img1, img2), axis=1)
+img2 = cv2.imread('./photos/{0}photo-{1}.png'.format(foldernum-2, photonum-2))
+img2 = cv2.imread('./photos/{0}photo-{1}.png'.format(foldernum-1, photonum-1))
+vis = np.concatenate((img1, img2, img3, im4), axis=1)
 cv2.imwrite('/photos/out.png', vis)
         
 cv2.destroyWindow("preview") 
