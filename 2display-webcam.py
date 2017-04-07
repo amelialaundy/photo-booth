@@ -64,6 +64,10 @@ def start():
     start_time = int(time.time())
     batch_id = uuid.uuid4()
     num_of_photos = photo_batch_size
+    one_image = cv2.resize(cv2.imread('./1.jpg'),(800, 600))
+    two_image = cv2.resize(cv2.imread('./2.jpg'),(800, 600))
+    three_image = cv2.resize(cv2.imread('./3.jpg'),(800, 600))
+    white_image = cv2.imread('./white.jpg')
     while vc.isOpened():
         
         grab, frame = vc.read()
@@ -78,6 +82,12 @@ def start():
             has_started = True
             start_time=now_time
             batch_id = uuid.uuid4()
+            cv2.imshow("preview", three_image)
+            cv2.waitKey(400)
+            cv2.imshow("preview", two_image)
+            cv2.waitKey(400)
+            cv2.imshow("preview", one_image)
+            cv2.waitKey(20)
             print 'starting batch: {0} at time: {1}'.format(batch_id, now_time)
 ##        if key == 116: #t start againt a new batch
 ##            has_started = False
@@ -88,6 +98,8 @@ def start():
             
 
         if (start_time - now_time == time_between_photos) and (has_started) and (num_of_photos > 0):
+            cv2.imshow("preview", white_image)
+            cv2.waitKey(20)
             captureimage(frame, batch_id)
             if (num_of_photos == 1): #we have taken the last photo of the batch
                 stichphotos(batch_id) #put the photos together
