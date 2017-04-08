@@ -76,7 +76,7 @@ def start():
     one_image = cv2.resize(cv2.imread('./1.jpg'), (800, 600))
     two_image = cv2.resize(cv2.imread('./2.jpg'), (800, 600))
     three_image = cv2.resize(cv2.imread('./3.jpg'), (800, 600))
-    white_image = cv2.imread('./whiteflash.png', (800, 600))
+    white_image = cv2.resize(cv2.imread('./whiteflash.png'), (800, 600))
     while vc.isOpened():
 
         grab, frame = vc.read()
