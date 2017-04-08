@@ -13,19 +13,18 @@ SINGLE_PHOTOS_DIR = '/media/pi/88DB-D77C/photos/singles'
 VERTICAL_PHOTOS_DIR = '/media/pi/88DB-D77C/photos/vertical'
 HORIZONTAL_PHOTOS_DIR = '/media/pi/88DB-D77C/photos/horizontal'
 PHOTO_BATCH_SIZE = 4
-TIME_BETWEEN_PHOTOS = -1
+TIME_BETWEEN_PHOTOS = -4
 
 
 def captureimage(frame, batch_id):
     name = '{0}/{1}-photo-{2}.png'.format(SINGLE_PHOTOS_DIR, batch_id, int(time.time()))
     print 'taking photo {0}'.format(name)
-    #img = Image.fromarray(frame)
-    # img.save(name)
+    time.sleep(2)
+    print 'after sleep'
     cv2.imwrite(name, frame)
 
 
 def stichphotos(batch_id):
-
     photos = os.listdir(SINGLE_PHOTOS_DIR)
     matching = []
     for photo in photos:
@@ -78,7 +77,6 @@ def start():
     three_image = cv2.resize(cv2.imread('./3.jpg'), (800, 600))
     white_image = cv2.resize(cv2.imread('./flash.png'), (800, 600))
     while vc.isOpened():
-
         grab, frame = vc.read()
         cv2.imshow("preview", frame)
         key = cv2.waitKey(20)
@@ -102,7 +100,11 @@ def start():
         if (start_time - now_time == TIME_BETWEEN_PHOTOS) and (has_started) and (num_of_photos > 0):
             cv2.imshow("preview", white_image)
             cv2.waitKey(400)
+            cv2.imshow("preview", frame)
+            key = cv2.waitKey(20)
+            print 'after wait key'
             captureimage(frame, batch_id)
+            print 'after captureimage'
             if num_of_photos == 1:  # we have taken the last photo of the batch
                 stichphotos(batch_id)  # put the photos together
                 print 'processed batch:{0} press enter to start next batch'.format(batch_id)
