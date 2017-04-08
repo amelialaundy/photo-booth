@@ -101,7 +101,7 @@ def start():
 
         if (start_time - now_time == TIME_BETWEEN_PHOTOS) and (has_started) and (num_of_photos > 0):
             cv2.imshow("preview", white_image)
-            cv2.waitKey(20)
+            cv2.waitKey(400)
             captureimage(frame, batch_id)
             if num_of_photos == 1:  # we have taken the last photo of the batch
                 stichphotos(batch_id)  # put the photos together
