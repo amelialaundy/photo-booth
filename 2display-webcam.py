@@ -19,8 +19,6 @@ TIME_BETWEEN_PHOTOS = -4
 def captureimage(frame, batch_id):
     name = '{0}/{1}-photo-{2}.png'.format(SINGLE_PHOTOS_DIR, batch_id, int(time.time()))
     print 'taking photo {0}'.format(name)
-    time.sleep(2)
-    print 'after sleep'
     cv2.imwrite(name, frame)
 
 
@@ -103,6 +101,8 @@ def start():
             cv2.imshow("preview", frame)
             key = cv2.waitKey(20)
             print 'after wait key'
+            time.sleep(2)
+            print 'after sleep'
             captureimage(frame, batch_id)
             print 'after captureimage'
             if num_of_photos == 1:  # we have taken the last photo of the batch
