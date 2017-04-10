@@ -35,11 +35,11 @@ class App:
         three_image = cv2.resize(cv2.imread('./3.jpg'), (640, 480))
         white_image = cv2.resize(cv2.imread('./flash.png'), (640, 480))
         self.count_down_images = {'1': one_image, '2': two_image, '3': three_image}
+         
     def on_init(self):
         """called on startup"""
         zope.event.subscribers.append(self.on_enter)
         zope.event.subscribers.append(self.on_exit)
-        #zope.event.classhandler.handler(np.ndarray, self.captureimage)
         zope.event.subscribers.append(self.captureimage)
         zope.event.subscribers.append(self.after_image_capture)
         cv2.namedWindow("preview")
