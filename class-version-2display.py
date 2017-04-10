@@ -25,21 +25,17 @@ class App:
     video_capture = None
     num_of_photos = PHOTO_BATCH_SIZE
     count_down_images = None
-    white_image = None
 
     def __init__(self):
         self._running = True
-
-        one_image = cv2.resize(cv2.imread('./1.jpg'), (640, 480))
-        two_image = cv2.resize(cv2.imread('./2.jpg'), (640, 480))
-        three_image = cv2.resize(cv2.imread('./3.jpg'), (640, 480))
-        white_image = cv2.resize(cv2.imread('./flash.png'), (640, 480))
+        one_image = cv2.resize(cv2.imread('./1.jpg'), SIZE)
+        two_image = cv2.resize(cv2.imread('./2.jpg'), SIZE)
+        three_image = cv2.resize(cv2.imread('./3.jpg'), SIZE)
         self.count_down_images = {'1': one_image, '2': two_image, '3': three_image}
     def on_init(self):
         """called on startup"""
         zope.event.subscribers.append(self.on_enter)
         zope.event.subscribers.append(self.on_exit)
-        #zope.event.classhandler.handler(np.ndarray, self.captureimage)
         zope.event.subscribers.append(self.captureimage)
         zope.event.subscribers.append(self.after_image_capture)
         cv2.namedWindow("preview")
@@ -68,7 +64,7 @@ class App:
         """handles esc key event,exit program"""
         if isinstance(event, int) and event == 27:
             stitch.stitch_photos(self.batch_id) # exit on ESC
-            self._running = False          
+            self._running = False
 
     def captureimage(self, event):
         """handles frame event, write the current frame to disk"""
@@ -107,10 +103,12 @@ class App:
         cv2.destroyWindow("preview")
 
     def seconds_until_next_photo(self):
+        """seconds left until next photo"""
         time_between_start_of_batch_and_now = (self.now_time - self.start_time)
         return TIME_BETWEEN_PHOTOS - time_between_start_of_batch_and_now
-        
+
     def get_current_image(self):
+        """returns either an overlay with countdown or just the current frame"""
         seconds_until_next_photo = self.seconds_until_next_photo()
         print 'seconds_until_next_photo = {0}'.format(seconds_until_next_photo)
         result = None

@@ -9,6 +9,7 @@ VERTICAL_PHOTOS_DIR = '/media/pi/88DB-D77C/photos/vertical'
 HORIZONTAL_PHOTOS_DIR = '/media/pi/88DB-D77C/photos/horizontal'
 
 def stitch_photos(batch_id):
+    """saves a vertical and a horiztonal image of all of the images in the batch"""
     photos = os.listdir(SINGLE_PHOTOS_DIR)
     matching = []
     for photo in photos:
@@ -29,21 +30,17 @@ def stitch_photos(batch_id):
     min_shape = sorted([(np.sum(i.size), i.size) for i in imgs])[0][1]
     imgs_comb = np.hstack((np.asarray(i.resize(min_shape)) for i in imgs))
 
-    # save that beautiful picture
+    # save picture
     imgs_comb = Image.fromarray(imgs_comb)
     horizontal_image_name = '{0}/Horizontal-{1}.jpg'.format(
         HORIZONTAL_PHOTOS_DIR, int(time.time()))
     imgs_comb.save(horizontal_image_name)
     print 'saved horiztonal image: {0}'.format(horizontal_image_name)
 
-    # for a vertical stacking it is simple: use vstack
+    # for a vertical stacking use vstack
     imgs_comb = np.vstack((np.asarray(i.resize(min_shape)) for i in imgs))
     imgs_comb = Image.fromarray(imgs_comb)
     vertical_image_name = '{0}/Vertical-{1}.jpg'.format(
         VERTICAL_PHOTOS_DIR, int(time.time()))
     imgs_comb.save(vertical_image_name)
     print 'saved vertical image: {0}'.format(horizontal_image_name)
-
-
-# if __name__ == "__main__":
-#     dostuff()
