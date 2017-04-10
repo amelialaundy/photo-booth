@@ -3,6 +3,7 @@ import sys
 from PIL import Image
 import time as time
 import numpy as np
+import tweetphotos
 PHOTOS_DIR = '/media/pi/88DB-D77C/photos'
 SINGLE_PHOTOS_DIR = '/media/pi/88DB-D77C/photos/singles'
 VERTICAL_PHOTOS_DIR = '/media/pi/88DB-D77C/photos/vertical'
@@ -43,4 +44,5 @@ def stitch_photos(batch_id):
     vertical_image_name = '{0}/Vertical-{1}.jpg'.format(
         VERTICAL_PHOTOS_DIR, int(time.time()))
     imgs_comb.save(vertical_image_name)
-    print 'saved vertical image: {0}'.format(horizontal_image_name)
+    print 'saved vertical image: {0}'.format(vertical_image_name)
+    tweetphotos.post_to_twitter('works on my machine', vertical_image_name)
