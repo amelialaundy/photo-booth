@@ -1,10 +1,17 @@
-import facebook
 import ConfigParser
 
-configParser = ConfigParser.RawConfigParser()   
-configFilePath = r'../keys.txt'
-configParser.read(configFilePath)
+import facebook
 
-graph = facebook.GraphAPI(access_token=configParser.get('facebook', 'access_token_photo_booth'), version='2.7')
-print graph.__dict__        
-graph.put_photo(image=open(configParser.get('facebook', 'test_photo'), 'rb'), album_path=configParser.get('facebook', 'test_album_id') + "/photos")
+CONFIG_PARSER = ConfigParser.RawConfigParser()
+CONFIG_FILE_PATH = r'../keys.txt'
+CONFIG_PARSER.read(CONFIG_FILE_PATH)
+
+def post_to_facebook(image_to_post):
+    '''reads from config the access_token and album id and posts image to FB'''
+    graph = facebook.GraphAPI(
+        access_token=CONFIG_PARSER.get('facebook', 'access_token_photo_booth'),
+        version='2.7')
+        #image=open(CONFIG_PARSER.get('facebook', 'test_photo'), 'rb')
+    graph.put_photo(
+        image=image_to_post,
+        album_path=CONFIG_PARSER.get('facebook', 'test_album_id') + "/photos")
