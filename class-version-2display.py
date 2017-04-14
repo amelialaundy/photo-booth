@@ -1,4 +1,5 @@
 
+import threading
 import time as time
 import uuid
 
@@ -15,6 +16,7 @@ SINGLE_PHOTOS_DIR = '/media/pi/88DB-D77C/photos/singles'
 PHOTO_BATCH_SIZE = 3
 TIME_BETWEEN_PHOTOS = 4
 PHOTO_TAKEN = 'photo_taken'
+ADELE_PHOTO = '/media/pi/88DB-D77C/photos/adele.jpg'
 
 class App:
     """main"""
@@ -31,7 +33,8 @@ class App:
         one_image = cv2.resize(cv2.imread('./1.jpg'), SIZE)
         two_image = cv2.resize(cv2.imread('./2.jpg'), SIZE)
         three_image = cv2.resize(cv2.imread('./3.jpg'), SIZE)
-        self.count_down_images = {'1': one_image, '2': two_image, '3': three_image}
+        adele_image = cv2.resize(cv2.imread(ADELE_PHOTO), SIZE)
+        self.count_down_images = {'1': one_image, '2': two_image, '3': three_image, '4':adele_image}
          
     def on_init(self):
         """called on startup"""
@@ -80,14 +83,19 @@ class App:
         """handles event photo_taken and increments the photo count"""
         if isinstance(event, str) and event == PHOTO_TAKEN: #make sure it is a string
             if self.num_of_photos == 1:  # we have taken the last photo of the batch
-                stitch.stitch_photos(self.batch_id)  # put the photos together
+                #start the stitching in a new thread
+                thread = threading.Thread(target=stitch.stitch_photos, args=(self.batch_id,))
+                thread.daemon = True                            # Daemonize thread
+                thread.start()
                 print 'processed batch:{0} press enter to start next batch'.format(self.batch_id)
                 self.is_processing = False  # we are not taking a photos to set this false
                 self.batch_id = None  # remove batch_id
                 self.num_of_photos = PHOTO_BATCH_SIZE # set the number of photos back to default
             else:
-                self.num_of_photos = self.num_of_photos - 1 # we are still taking photos so just decrement by 1
-                self.start_time = self.now_time # always override the start time when we are taking photos
+                # we are still taking photos so just decrement by 1
+                self.num_of_photos = self.num_of_photos - 1
+                #set start time back to now
+                self.start_time = self.now_time
 
     def on_loop(self):
         """loop, raises the current frame as an event"""
