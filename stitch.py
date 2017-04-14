@@ -47,7 +47,7 @@ def stitch_photos(batch_id):
     if POST_TWITTER:
         tweetphotos.post_to_twitter('works on my machine', shark_image_path)
     if POST_TO_FB:
-        facebookphotos.post_to_facebook(vertical_image_path)
+        facebookphotos.post_to_facebook(shark_image_path)
 
 def add_shark_border(photo):
     '''creates blank larger image, pastes photo onto it in middle, then overlays the shark border'''
