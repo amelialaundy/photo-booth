@@ -13,6 +13,8 @@ HORIZONTAL_PHOTOS_DIR = '/media/pi/88DB-D77C/photos/horizontal'
 SHARK_DIR = '/media/pi/88DB-D77C/photos/sharky'
 SHARK_IMAGE = '/media/pi/88DB-D77C/photos/stretch-shark.png'
 SAVE_HORIZONTAL = False
+POST_TWITTER = False
+POST_TO_FB = True
 
 def get_photo_batch(batch_id):
     '''finds the photos in the directory that belong to this batch_id'''
@@ -42,8 +44,10 @@ def stitch_photos(batch_id):
         make_horizontal(min_shape, imgs)
     vertical_image = make_vertical(min_shape, imgs)
     shark_image = add_shark_border(vertical_image)
-    #tweetphotos.post_to_twitter('works on my machine', shark_image)
-    facebookphotos.post_to_facebook(vertical_image)
+    if POST_TWITTER:
+        tweetphotos.post_to_twitter('works on my machine', shark_image)
+    if POST_TO_FB:
+        facebookphotos.post_to_facebook(vertical_image)
 
 def add_shark_border(photo):
     '''creates blank larger image, pastes photo onto it in middle, then overlays the shark border'''
