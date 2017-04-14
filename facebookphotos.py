@@ -13,5 +13,5 @@ def post_to_facebook(image_to_post):
         version='2.7')
         #image=open(CONFIG_PARSER.get('facebook', 'test_photo'), 'rb')
     graph.put_photo(
-        image=image_to_post,
+        image=open(image_to_post, 'rb'),
         album_path=CONFIG_PARSER.get('facebook', 'test_album_id') + "/photos")

@@ -42,15 +42,16 @@ def stitch_photos(batch_id):
 
     if SAVE_HORIZONTAL:
         make_horizontal(min_shape, imgs)
-    vertical_image = make_vertical(min_shape, imgs)
-    shark_image = add_shark_border(vertical_image)
+    vertical_image_path = make_vertical(min_shape, imgs)
+    shark_image_path = add_shark_border(vertical_image_path)
     if POST_TWITTER:
-        tweetphotos.post_to_twitter('works on my machine', shark_image)
+        tweetphotos.post_to_twitter('works on my machine', shark_image_path)
     if POST_TO_FB:
-        facebookphotos.post_to_facebook(vertical_image)
+        facebookphotos.post_to_facebook(vertical_image_path)
 
 def add_shark_border(photo):
     '''creates blank larger image, pastes photo onto it in middle, then overlays the shark border'''
+    photo = Image.open(photo)
     original_photo_size = photo.size
     shark_im = Image.open(SHARK_IMAGE)
     new_size = (900, 1700)
@@ -70,7 +71,7 @@ def add_shark_border(photo):
         SHARK_DIR, int(time.time()))
     photo_with_blank_border.save(image_name)
     print 'saved sharky image: {0}'.format(image_name)
-    return photo_with_blank_border
+    return image_name
 
 def make_horizontal(min_shape, imgs):
     '''makes an array of the images into a wide image then saves'''
@@ -92,4 +93,4 @@ def make_vertical(min_shape, imgs):
         VERTICAL_PHOTOS_DIR, int(time.time()))
     vertical_image.save(vertical_image_name)
     print 'saved vertical image: {0}'.format(vertical_image_name)
-    return vertical_image
+    return vertical_image_name
