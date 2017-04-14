@@ -8,22 +8,26 @@ PHOTOS_DIR = '/media/pi/88DB-D77C/photos'
 SINGLE_PHOTOS_DIR = '/media/pi/88DB-D77C/photos/singles'
 VERTICAL_PHOTOS_DIR = '/media/pi/88DB-D77C/photos/vertical'
 HORIZONTAL_PHOTOS_DIR = '/media/pi/88DB-D77C/photos/horizontal'
+SHARK_DIR = '/media/pi/88DB-D77C/photos/sharky'
+SHARK_IMAGE = '/media/pi/88DB-D77C/photos/stretch-shark.png'
 
-def stitch_photos(batch_id):
-    """saves a vertical and a horiztonal image of all of the images in the batch"""
+def get_photo_batch(batch_id):
     photos = os.listdir(SINGLE_PHOTOS_DIR)
     matching = []
     for photo in photos:
         if photo.startswith(str(batch_id)):
             matching.append('{0}/{1}'.format(SINGLE_PHOTOS_DIR, photo))
+    return matching
+
+    
+def stitch_photos(batch_id):
+    """saves a vertical and a horiztonal image of all of the images in the batch"""
+    matching = get_photo_batch(batch_id)
 
     number = len(matching)
     if number == 0:
         return
     print 'stiching photos there are: {0}'.format(number)
-    print 'photos taken:'
-    for image_name in matching:
-        print image_name
 
     imgs = [Image.open(i) for i in matching]
     # pick the image which is the smallest, and resize the others to match it
@@ -45,4 +49,22 @@ def stitch_photos(batch_id):
         VERTICAL_PHOTOS_DIR, int(time.time()))
     imgs_comb.save(vertical_image_name)
     print 'saved vertical image: {0}'.format(vertical_image_name)
-    tweetphotos.post_to_twitter('works on my machine', vertical_image_name)
+    #tweetphotos.post_to_twitter('works on my machine', imgs_comb)
+    add_shark_border(imgs_comb)
+
+def add_shark_border(photo):
+    original_photo_size = photo.size
+    shark_im = Image.open(SHARK_IMAGE)
+    new_size = (900, 1700)
+    photo_with_blank_border = Image.new("RGB", new_size)  #blank image same size as shark border
+
+    photo_with_blank_border.paste(photo, ((photo_with_blank_border.size[0]-original_photo_size[0])/2,
+                          (photo_with_blank_border.size[1]-original_photo_size[1])/2)) #paste photo in middle of it
+    
+    photo_with_blank_border.paste(shark_im, (0,0),shark_im) #this is the magic, put the shark border over the top
+    image_name = '{0}/sharky-{1}.jpg'.format(
+        SHARK_DIR, int(time.time()))
+    photo_with_blank_border.save(image_name)
+    print 'saved sharky image: {0}'.format(image_name)
+    
+    

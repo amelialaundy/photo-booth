@@ -111,7 +111,7 @@ class App:
     def get_current_image(self):
         """returns either an overlay with countdown or just the current frame"""
         seconds_until_next_photo = self.seconds_until_next_photo()
-        print 'seconds_until_next_photo = {0}'.format(seconds_until_next_photo)
+        #print 'seconds_until_next_photo = {0}'.format(seconds_until_next_photo)
         result = None
         if str(seconds_until_next_photo) in self.count_down_images:
             return cv2.addWeighted(self.count_down_images[str(seconds_until_next_photo)], 0.5, self.video_capture.read()[1], 0.5, 0.0)

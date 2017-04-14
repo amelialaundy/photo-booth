@@ -20,5 +20,8 @@ def post_to_twitter(text, image):
     #statuses = api.GetUserTimeline(screen_name=user)
     #print statuses
 
-    # status = api.PostUpdate(text, image)
-    print status.text
+    #status = api.PostUpdate(text, image)
+    #print status.text
+
+
+#post_to_twitter('hey alex','/media/pi/88DB-D77C/photos/horizontal/Horizontal-1491905533.jpg')
