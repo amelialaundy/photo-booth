@@ -16,6 +16,7 @@ SINGLE_PHOTOS_DIR = '/media/pi/88DB-D77C/photos/singles'
 PHOTO_BATCH_SIZE = 3
 TIME_BETWEEN_PHOTOS = 5
 PHOTO_TAKEN = 'photo_taken'
+
 ADELE_PHOTO = '/media/pi/88DB-D77C/photos/adele-polaroid-resized.png'
 
 class App:
