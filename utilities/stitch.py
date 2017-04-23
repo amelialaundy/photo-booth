@@ -12,6 +12,8 @@ VERTICAL_PHOTOS_DIR = '/media/pi/88DB-D77C/photos/vertical'
 HORIZONTAL_PHOTOS_DIR = '/media/pi/88DB-D77C/photos/horizontal'
 SHARK_DIR = '/media/pi/88DB-D77C/photos/sharky'
 SHARK_IMAGE = '/media/pi/88DB-D77C/photos/stretch-shark.png'
+BLANK_PHOTO = '/media/pi/88DB-D77C/photos/blank_photo.png'
+#BLANK_PHOTO_SIZE = (900, 1700)
 SAVE_HORIZONTAL = False
 POST_TWITTER = False
 POST_TO_FB = True
@@ -52,24 +54,23 @@ def stitch_photos(batch_id):
 def add_shark_border(photo):
     '''creates blank larger image, pastes photo onto it in middle, then overlays the shark border'''
     photo = Image.open(photo)
-    original_photo_size = photo.size
     shark_im = Image.open(SHARK_IMAGE)
-    new_size = (900, 1700)
-    #create a new blank black image
-    photo_with_blank_border = Image.new("RGB", new_size)  #blank image same size as shark border
 
-    location_to_paste_x = (photo_with_blank_border.size[0]-original_photo_size[0])/2
-    location_to_paste_y = (photo_with_blank_border.size[1]-original_photo_size[1])/2
+    #create a new blank black image
+    base_photo = Image.open(BLANK_PHOTO).copy()
+
+    location_to_paste_x = (base_photo.size[0]-photo.size[0])/2
+    location_to_paste_y = (base_photo.size[1]-photo.size[1])/2
     #paste the photo in middle of it
-    photo_with_blank_border.paste(
+    base_photo.paste(
         photo,
         (location_to_paste_x, location_to_paste_y))
 
     #this is the magic, put the shark border over the top
-    photo_with_blank_border.paste(shark_im, (0, 0), shark_im)
+    base_photo.paste(shark_im, (0, 0), shark_im)
     image_name = '{0}/sharky-{1}.jpg'.format(
         SHARK_DIR, int(time.time()))
-    photo_with_blank_border.save(image_name)
+    base_photo.save(image_name)
     print 'saved sharky image: {0}'.format(image_name)
     return image_name
 
