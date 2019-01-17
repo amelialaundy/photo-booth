@@ -5,16 +5,16 @@ import time as time
 import numpy as np
 import tweetphotos
 import facebookphotos
-PHOTOS_DIR = '/media/pi/88DB-D77C/photos'
-BLANK_IMAGE = '/media/pi/88DB-D77C/photos/blank_photo.png'
-SHARK_IMAGE = '/media/pi/88DB-D77C/photos/stretch-shark.png'
+PHOTOS_DIR = '/media/pi/88DB-D77C1/photos'
+BLANK_IMAGE = '/media/pi/88DB-D77C1/photos/frame-real.png'
+SHARK_IMAGE = '/media/pi/88DB-D77C1/photos/frame-real.png'
 
 
 class Stitch(object):
     '''stiches given photos together based on batch id'''
     save_horizontal = False
     post_to_twitter = False
-    post_to_fb = False
+    post_to_fb = True
 
     def __init__(self):
         self.single_photos_dir = '{0}/singles'.format(PHOTOS_DIR)
@@ -54,6 +54,7 @@ class Stitch(object):
         background.paste(photo, paste_location)
 
         #this is the magic, put the shark border over the top
+        x, y = self.shark_image.size
         background.paste(self.shark_image, (0, 0), self.shark_image)
         sharkified_image = self.__get_shark_image_name()
         background.save(sharkified_image)

@@ -1,4 +1,6 @@
+import sys
 
+sys.path.append('/home/pi/Projects/photo-booth/utilities')
 import threading
 import time as time
 import uuid
@@ -7,17 +9,17 @@ import cv2
 import numpy as np
 
 #import zope.event.classhandler
-import stitch as stitch
+from stitch import Stitch
 import zope.event
 from PIL import Image
 
 SIZE = (640, 480)
-SINGLE_PHOTOS_DIR = '/media/pi/88DB-D77C/photos/singles'
+SINGLE_PHOTOS_DIR = '/media/pi/88DB-D77C1/photos/singles'
 PHOTO_BATCH_SIZE = 3
 TIME_BETWEEN_PHOTOS = 5
 PHOTO_TAKEN = 'photo_taken'
 
-ADELE_PHOTO = '/media/pi/88DB-D77C/photos/adele-polaroid-resized.png'
+ADELE_PHOTO = '/media/pi/88DB-D77C1/photos/adele-polaroid-resized.png'
 
 class App:
     """main"""
@@ -32,10 +34,11 @@ class App:
 
     def __init__(self):
         self._running = True
+        cv2.imread('./1.jpg')
         one_image = cv2.resize(cv2.imread('./1.jpg'), SIZE)
         two_image = cv2.resize(cv2.imread('./2.jpg'), SIZE)
         three_image = cv2.resize(cv2.imread('./3.jpg'), SIZE)
-        self.adele_image = cv2.resize(cv2.imread(ADELE_PHOTO), SIZE)
+        self.adele_image = cv2.resize(cv2.imread('./Splash.png'), SIZE)
         self.count_down_images = {'1': one_image, '2': two_image, '3': three_image}
          
     def on_init(self):
@@ -87,7 +90,7 @@ class App:
         if isinstance(event, str) and event == PHOTO_TAKEN: #make sure it is a string
             if self.num_of_photos == 1:  # we have taken the last photo of the batch
                 #start the stitching in a new thread
-                thread = threading.Thread(target=stitch.stitch_photos, args=(self.batch_id,))
+                thread = threading.Thread(target=Stitch.stitch_photos, args=(Stitch(), self.batch_id,))
                 thread.daemon = True                            # Daemonize thread
                 thread.start()
                 print 'processed batch:{0} press enter to start next batch'.format(self.batch_id)

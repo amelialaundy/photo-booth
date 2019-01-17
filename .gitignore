@@ -93,3 +93,5 @@ photos/
 *.jpg
 *.jpeg
 test-jurassic.py
+*/keys.txt
+keys.txt
